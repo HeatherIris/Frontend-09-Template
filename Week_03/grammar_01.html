@@ -38,7 +38,7 @@
                 token.value = result[0];
                 // 返回一个序列
                 yield token;
-            } while (result);
+            } 
             
             yield {
                 type: "EOF"
@@ -69,11 +69,11 @@
             let node = {
                 type: "AdditiveExpression",
                 children: [source[0]]
-            }
+            };
             source[0] = node;
             return AdditiveExpression(source);
         }
-        if (source[0].type ===  "AdditiveExpression" && source[1] && source[1] === "+") {
+        if (source[0].type ===  "AdditiveExpression" && source[1] && source[1].type === "+") {
             let node = {
                 type: "AdditiveExpression",
                 operator: "+",
@@ -86,7 +86,7 @@
             source.unshift(node);
             return AdditiveExpression(source);
         }
-        if (source[0].type === "AdditiveExpression" && source[1] && source[1] === "-") {
+        if (source[0].type === "AdditiveExpression" && source[1] && source[1].type === "-") {
             let node = {
                 type: "AdditiveExpression",
                 operator: "-",
@@ -115,7 +115,7 @@
             source[0] = node;
             return MultiplicativeExpression(source);
         }
-        if (source[0].type ===  "MultiplicativeExpression" && source[1] && source[1] === "*") {
+        if (source[0].type ===  "MultiplicativeExpression" && source[1] && source[1].type === "*") {
             let node = {
                 type: "MultiplicativeExpression",
                 operator: "*",
@@ -127,7 +127,7 @@
             source.unshift(node);
             return MultiplicativeExpression(source);
         }
-        if (source[0].type === "MultiplicativeExpression" && source[1] && source[1] === "/") {
+        if (source[0].type === "MultiplicativeExpression" && source[1] && source[1].type === "/") {
             let node = {
                 type: "MultiplicativeExpression",
                 operator: "/",
