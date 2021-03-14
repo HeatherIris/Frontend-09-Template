@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>词法分析(代码整理，设计使用方法)</title>
+</head>
+<body>
+    <script>
+        var regexp = /([0-9\.]+)|([ \t]+)|([\r\n]+)|(\*)|(\/)|(\+)|(\-)/g;
+        var dictionary = ["number", "Whitespace", "LineTerminator", "*", "/", "+", "-"];
+
+        function* tokenize(source) {
+            var result = null;
+
+            // lexical.html:21 Uncaught TypeError: Cannot read property '1' of null
+            var lastIndex = 0;  //匹配长度与前进长度不一样
+
+            while (true) {
+                lastIndex = regexp.lastIndex;
+                result = regexp.exec(source)
+                // 没匹配出来
+                if (!result) 
+                    break;
+                // 匹配出来但是有不认识的字符
+                if (regexp.lastIndex - lastIndex > result[0].length) 
+                    break;
+
+                // 用对象存储token
+                let token = {
+                    type: null,
+                    value: null
+                }
+                for (var i = 1; i<=dictionary.length; i++) {
+                    if (result[i]) 
+                    token.type = dictionary[i - 1];
+                }
+                token.value = result[0];
+                // 返回一个序列
+                yield token;
+            }
+            yield {
+                type: "EOF"
+            }
+        }
+
+    for(let token of tokenize("1024 + 10 * 25"))  {
+        console.log(token)
+    }  
+
+
+    </script>
+</body>
+</html>
