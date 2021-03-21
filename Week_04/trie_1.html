@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>字典树</title>
+</head>
+<body>
+    <script>
+        let $ = Symbol("$");
+        class Trie {
+            constructor() {
+                this.root = Object.create(null); // 避免收到原型数据污染
+            }
+
+            // 将字符串插入树
+            insert(word) {
+                let node = this.root; 
+                for (let c of  word) {
+                    if (!node[c]) {
+                        node[c] = Object.create(null);
+                    }
+                    node = node[c]; // 下一层级
+
+                    // 截止符
+                    if (!($ in node)) {
+                        node[$] = 0;
+                    }
+                    node[$]++
+                }
+            }
+            most() {
+                let max = 0;
+                let maxWord = null;
+                let visit = (node, word) => {
+                    // 有没有结束符，有的话代表截止的点
+                    if (node[$] && node[$] > max) {
+                        max = node[$];  // 记录word出现的次数
+                        maxWord = word;
+                    }
+                    for (let p in node) {
+                        visit(node[p], word + p);
+                    }
+                }
+                visit(this.root, "");
+                console.log('maxWord: ',maxWord, 'max', max);
+            }
+        }
+        // 产生随机的单词 length: 字符个数
+        function randomWord(length) {
+            var s = "";
+            for (let i = 0; i < length; i++) {
+                // 随机生成26个字母
+                s += String.fromCharCode(Math.random() * 26 + "a".charCodeAt(0));
+            }
+            return s
+        }
+
+        // 插入十万个字符
+        let  trie = new Trie();
+        for (let i = 0; i < 100000; i++) {
+            trie.insert(randomWord(4))
+        }
+    </script>
+</body>
+</html>
